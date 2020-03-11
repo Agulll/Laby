@@ -1,0 +1,2 @@
+# Laby
+Auto_maze

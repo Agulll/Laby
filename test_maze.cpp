@@ -7,10 +7,10 @@
   struct cell {
   bool visited = false;
   int x, y;
-  bool t = true;
-  bool r = true;
-  bool l = true;
-  bool b = true;
+  bool t = false;
+  bool r = false;
+  bool l = false;
+  bool b = false;
   };
 
     struct builder {
@@ -108,7 +108,7 @@ bool anyof (std::array<std::array<cell, 5>,5> grid){
     std::cout << "starting.\n";
     //while (!std::any_of(grid.begin(), grid.end(), [](const auto&line){return std::any_of(line.begin(),line.end(),[](const auto&cell) {return cell.visited;});}))
     //while (anyof(grid)){
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 101; i++)
     {
     grid[b1.x][b1.y].visited = true;
     show(grid, b1);
@@ -116,49 +116,49 @@ bool anyof (std::array<std::array<cell, 5>,5> grid){
     //top right bottom left
     if (b1.y > 0 && !grid[b1.x][b1.y - 1].visited){
       Neighbors.push_back(grid[b1.x][b1.y - 1]);
-    }
-    if (b1.x < 5 && !grid[b1.x + 1][b1.y].visited){
+      std::cout << "push " << (grid[b1.x][b1.y - 1].x) << ',' << (grid[b1.x][b1.y - 1].y) << '\n';
+    } if (b1.x < 4 && !grid[b1.x + 1][b1.y].visited){
       Neighbors.push_back(grid[b1.x + 1][b1.y]);
-    }
-    if (b1.y < 5 && !grid[b1.x][b1.y + 1].visited){
+      std::cout << "push " << (grid[b1.x + 1][b1.y].x) << ',' << (grid[b1.x + 1][b1.y].y) << '\n';
+    } if (b1.y < 4 && !grid[b1.x][b1.y + 1].visited){
       Neighbors.push_back(grid[b1.x][b1.y + 1]);
-    }
-    if (b1.x < 0 && !grid[b1.x - 1][b1.y].visited){
+      std::cout << "push " << (grid[b1.x][b1.y + 1].x) << ',' << (grid[b1.x][b1.y + 1].y) << '\n';
+    } if (b1.x < 0 && !grid[b1.x - 1][b1.y].visited){
       Neighbors.push_back(grid[b1.x - 1][b1.y]);
-    }
-    if (Neighbors.empty()){
+      std::cout << "push " << (grid[b1.x - 1][b1.y].x) << ',' << (grid[b1.x - 1][b1.y].y) << '\n';
+    } if (Neighbors.empty()){
       debug = "Back_tracking";
       b1.history.pop_back();
       b1.x = (b1.history.back().x);
       b1.y = (b1.history.back().y);
+    } else {
+      debug = "Foward_traking";
     }
-    // else {
-    //   debug = "Foward_traking";
-    //   b1.history.push_back(grid[b1.x][b1.y]);
-    //   std::srand(time(0));
-    int r = rand() % Neighbors.size();
-    //   if (b1.y - Neighbors[r].y ==  1 && b1.x - Neighbors[r].x == 0) {
-    //     grid[b1.x][b1.y].t = true;
-    //     //grid[b1.x][b1.y - 1].b = false;
-    //   }
-    //   if (b1.x - Neighbors[r].x == -1 && b1.y - Neighbors[r].y == 0) {
-    //     grid[b1.x][b1.y].r = true;
-    //     //grid[b1.x + 1][b1.y].l = false;
-    //   }
-    //   if (b1.y - Neighbors[r].y == -1 && b1.x - Neighbors[r].x == 0) {
-    //     grid[b1.x][b1.y].b = true;
-    //     //grid[b1.x][b1.y + 1].t = false;
-    //   }
-    //   if (b1.x - Neighbors[r].x ==  1 && b1.y - Neighbors[r].y == 0) {
-    //     grid[b1.x][b1.y].l = true;
-    //     //grid[b1.x - 1][b1.y].r = false;
-    //   }
-      b1.x = (Neighbors[r].x);
-      b1.y = (Neighbors[r].y);
-    // }
-    nb ++;
-    std::cout << "N° " << (nb) << "\n I did some " << (debug) << '\n';
+    std::srand(time(0));
+    if (Neighbors.size() != 0):
+      int r = rand() % Neighbors.size();
+        if (b1.y - Neighbors[r].y ==  1 && b1.x - Neighbors[r].x == 0) {
+          grid[b1.x][b1.y].l = true;
+          grid[b1.x][b1.y - 1].r = true;
+        }
+        if (b1.x - Neighbors[r].x == -1 && b1.y - Neighbors[r].y == 0) {
+          grid[b1.x][b1.y].b = true;
+          grid[b1.x + 1][b1.y].t = true;
+        }
+        if (b1.y - Neighbors[r].y == -1 && b1.x - Neighbors[r].x == 0) {
+          grid[b1.x][b1.y].r = true;
+          grid[b1.x][b1.y + 1].l = true;
+        }
+        if (b1.x - Neighbors[r].x ==  1 && b1.y - Neighbors[r].y == 0) {
+          grid[b1.x][b1.y].t = true;
+          grid[b1.x - 1][b1.y].b = true;
+        }
+        b1.x = (Neighbors[r].x);
+        b1.y = (Neighbors[r].y);
+        b1.history.push_back(grid[b1.x][b1.y]);
+      }
+      nb ++;
+      std::cout << "N° " << (nb) << "\n I did some " << (debug) << '\n';
   }
-}
 
 //problème sur la detéction et sur l'assigement des murs...

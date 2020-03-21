@@ -2,6 +2,8 @@
   #include <array>
   #include <vector>
   #include <algorithm>
+  #include <time.h>
+  #include <stdio.h>
 
 
   struct cell {
@@ -92,6 +94,7 @@ bool anyof (std::array<std::array<cell, 15>,15> grid){
 }
 
   int main() {
+    srand (time(NULL));
     builder b1;
     b1.x = 0;
     b1.y = 0;
@@ -116,17 +119,19 @@ bool anyof (std::array<std::array<cell, 15>,15> grid){
     //top right bottom left
     if (b1.y > 0 && !grid[b1.x][b1.y - 1].visited){
       Neighbors.push_back(grid[b1.x][b1.y - 1]);
-      std::cout << "push " << (grid[b1.x][b1.y - 1].x) << ',' << (grid[b1.x][b1.y - 1].y) << '\n';
+      std::cout << "push " << (grid[b1.x][b1.y - 1].x) << ',' << (grid[b1.x][b1.y - 1].y) << " - ";
     } if (b1.x < 15-1 && !grid[b1.x + 1][b1.y].visited){
       Neighbors.push_back(grid[b1.x + 1][b1.y]);
-      std::cout << "push " << (grid[b1.x + 1][b1.y].x) << ',' << (grid[b1.x + 1][b1.y].y) << '\n';
+      std::cout << "push " << (grid[b1.x + 1][b1.y].x) << ',' << (grid[b1.x + 1][b1.y].y) << " - ";
     } if (b1.y < 15-1 && !grid[b1.x][b1.y + 1].visited){
       Neighbors.push_back(grid[b1.x][b1.y + 1]);
-      std::cout << "push " << (grid[b1.x][b1.y + 1].x) << ',' << (grid[b1.x][b1.y + 1].y) << '\n';
+      std::cout << "push " << (grid[b1.x][b1.y + 1].x) << ',' << (grid[b1.x][b1.y + 1].y) << " - ";
     } if (b1.x < 0 && !grid[b1.x - 1][b1.y].visited){
       Neighbors.push_back(grid[b1.x - 1][b1.y]);
-      std::cout << "push " << (grid[b1.x - 1][b1.y].x) << ',' << (grid[b1.x - 1][b1.y].y) << '\n';
-    } if (Neighbors.empty()){
+      std::cout << "push " << (grid[b1.x - 1][b1.y].x) << ',' << (grid[b1.x - 1][b1.y].y) << " - ";
+    }
+    std::cout << '\n';
+     if (Neighbors.empty()){
       debug = "Back_tracking";
       b1.history.pop_back();
       b1.x = (b1.history.back().x);
@@ -134,9 +139,9 @@ bool anyof (std::array<std::array<cell, 15>,15> grid){
     } else {
       debug = "Foward_traking";
     }
-    std::srand(time(0));
     if (!Neighbors.empty())
     {int r = rand() % Neighbors.size();
+      std::cout << "r = " << (r) << '\n';
       if (b1.y - Neighbors[r].y ==  1 && b1.x - Neighbors[r].x == 0) {
         grid[b1.x][b1.y].l = true;
         grid[b1.x][b1.y - 1].r = true;
@@ -155,6 +160,7 @@ bool anyof (std::array<std::array<cell, 15>,15> grid){
       b1.history.push_back(grid[b1.x][b1.y]);
     }
     nb ++;
+    std::cout << "size = " << Neighbors.size() << '\n';
     std::cout << "N° " << (nb) << "\n I did some " << (debug) << '\n';
   }
 }

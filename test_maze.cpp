@@ -85,7 +85,7 @@
 bool anyof (std::array<std::array<cell, 15>,15> grid){
   for (std::size_t i = 0; i < grid.size(); i++) {
     for (std::size_t j = 0; j < grid[i].size(); j++) {
-      if (grid[i][j].visited == true){
+      if (!grid[i][j].visited){
         return true;
       }
     }
@@ -105,65 +105,46 @@ bool anyof (std::array<std::array<cell, 15>,15> grid){
         grid[i][j].y = j;
       }
     }
-    std::vector<cell> Neighbors;
-    int nb = 0;
-    std::string debug;
-    std::cout << "starting.\n";
+    grid[14][14].r = true;
+    grid[0][0].l = true;
+    std::vector<cell> neighbors;
     //while (!std::any_of(grid.begin(), grid.end(), [](const auto&line){return std::any_of(line.begin(),line.end(),[](const auto&cell) {return cell.visited;});}))
-    //while (anyof(grid)){
-    for (int i = 0; i < 1001; i++)
-    {
+    while (anyof(grid)){
     grid[b1.x][b1.y].visited = true;
     show(grid, b1);
-    Neighbors.clear();
+    neighbors.clear();
     //top right bottom left
     if (b1.y > 0 && !grid[b1.x][b1.y - 1].visited){
-      Neighbors.push_back(grid[b1.x][b1.y - 1]);
-      std::cout << "push " << (grid[b1.x][b1.y - 1].x) << ',' << (grid[b1.x][b1.y - 1].y) << " - ";
+      neighbors.push_back(grid[b1.x][b1.y - 1]);
     } if (b1.x < 15-1 && !grid[b1.x + 1][b1.y].visited){
-      Neighbors.push_back(grid[b1.x + 1][b1.y]);
-      std::cout << "push " << (grid[b1.x + 1][b1.y].x) << ',' << (grid[b1.x + 1][b1.y].y) << " - ";
+      neighbors.push_back(grid[b1.x + 1][b1.y]);
     } if (b1.y < 15-1 && !grid[b1.x][b1.y + 1].visited){
-      Neighbors.push_back(grid[b1.x][b1.y + 1]);
-      std::cout << "push " << (grid[b1.x][b1.y + 1].x) << ',' << (grid[b1.x][b1.y + 1].y) << " - ";
-    } if (b1.x < 0 && !grid[b1.x - 1][b1.y].visited){
-      Neighbors.push_back(grid[b1.x - 1][b1.y]);
-      std::cout << "push " << (grid[b1.x - 1][b1.y].x) << ',' << (grid[b1.x - 1][b1.y].y) << " - ";
+      neighbors.push_back(grid[b1.x][b1.y + 1]);
+    } if (b1.x > 0 && !grid[b1.x - 1][b1.y].visited){
+      neighbors.push_back(grid[b1.x - 1][b1.y]);
     }
-    std::cout << '\n';
-     if (Neighbors.empty()){
-      debug = "Back_tracking";
+     if (neighbors.empty()){
       b1.history.pop_back();
       b1.x = (b1.history.back().x);
       b1.y = (b1.history.back().y);
-    } else {
-      debug = "Foward_traking";
-    }
-    if (!Neighbors.empty())
-    {int r = rand() % Neighbors.size();
-      std::cout << "r = " << (r) << '\n';
-      if (b1.y - Neighbors[r].y ==  1 && b1.x - Neighbors[r].x == 0) {
+    } if (!neighbors.empty())
+    {int r = rand() % neighbors.size();
+      if (b1.y - neighbors[r].y ==  1 && b1.x - neighbors[r].x == 0) {
         grid[b1.x][b1.y].l = true;
         grid[b1.x][b1.y - 1].r = true;
-      } if (b1.x - Neighbors[r].x == -1 && b1.y - Neighbors[r].y == 0) {
+      } if (b1.x - neighbors[r].x == -1 && b1.y - neighbors[r].y == 0) {
         grid[b1.x][b1.y].b = true;
         grid[b1.x + 1][b1.y].t = true;
-      } if (b1.y - Neighbors[r].y == -1 && b1.x - Neighbors[r].x == 0) {
+      } if (b1.y - neighbors[r].y == -1 && b1.x - neighbors[r].x == 0) {
         grid[b1.x][b1.y].r = true;
         grid[b1.x][b1.y + 1].l = true;
-      } if (b1.x - Neighbors[r].x ==  1 && b1.y - Neighbors[r].y == 0) {
+      } if (b1.x - neighbors[r].x ==  1 && b1.y - neighbors[r].y == 0) {
         grid[b1.x][b1.y].t = true;
         grid[b1.x - 1][b1.y].b = true;
       }
-      b1.x = (Neighbors[r].x);
-      b1.y = (Neighbors[r].y);
+      b1.x = (neighbors[r].x);
+      b1.y = (neighbors[r].y);
       b1.history.push_back(grid[b1.x][b1.y]);
     }
-    nb ++;
-    std::cout << "size = " << Neighbors.size() << '\n';
-    std::cout << "N° " << (nb) << "\n I did some " << (debug) << '\n';
   }
 }
-
-
-//problème sur le random
